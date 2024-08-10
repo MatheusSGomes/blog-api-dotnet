@@ -21,5 +21,9 @@ public class ApplicationDbContext : DbContext
         modelBuilder.Entity<Article>()
             .Property(p => p.Content)
             .IsRequired();
+
+        modelBuilder.Entity<Category>()
+            .Property(p => p.Name)
+            .IsRequired();
     }
 }
