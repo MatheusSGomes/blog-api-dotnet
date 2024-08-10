@@ -7,8 +7,5 @@ public class ApplicationDbContext : DbContext
 {
     public DbSet<Article> Articles { get; set; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        optionsBuilder.UseNpgsql(@"Host=localhost;Port=5000;Username=docker;Password=docker;Database=blog;");
-    }
+    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options): base (options) { }
 }

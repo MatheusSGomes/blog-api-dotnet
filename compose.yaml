@@ -1,0 +1,16 @@
+version: '3'
+
+services:
+  postgres_blog:
+    container_name: postgres_blog
+    image: bitnami/postgresql:latest
+    ports:
+      - '5000:5432'
+    environment:
+      - POSTGRES_USER=docker
+      - POSTGRES_PASSWORD=docker
+      - POSTGRES_DB=blog
+    volumes:
+      - blog_pg_data:/bitnami/postgresql
+volumes:
+  blog_pg_data:
