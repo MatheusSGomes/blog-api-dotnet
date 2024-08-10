@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Blog.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240810010715_AddArticle")]
-    partial class AddArticle
+    [Migration("20240810013658_AddArticleWithRequiredColumns")]
+    partial class AddArticleWithRequiredColumns
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
