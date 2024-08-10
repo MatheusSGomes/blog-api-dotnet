@@ -7,6 +7,7 @@ public class ApplicationDbContext : DbContext
 {
     public DbSet<Article> Articles { get; set; }
     public DbSet<Category> Categories { get; set; }
+    public DbSet<Tag> Tags { get; set; }
 
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options): base (options) { }
 
