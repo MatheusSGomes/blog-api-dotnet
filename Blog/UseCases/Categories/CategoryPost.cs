@@ -1,4 +1,5 @@
 using Blog.Domain;
+using Blog.Exception;
 using Blog.Infrastructure;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,7 +14,7 @@ public class CategoryPost
     public static IResult Action([FromBody] CategoryRequest categoryRequest, ApplicationDbContext context)
     {
         if (string.IsNullOrEmpty(categoryRequest.Name))
-            return Results.BadRequest("Não é permitido cadastrar categoria sem nome");
+            return Results.BadRequest(ResourceErrorMessages.CATEGORY_NULL_OR_EMPTY);
 
         var category = new Category { Name = categoryRequest.Name };
         context.Categories.Add(category);
