@@ -12,6 +12,9 @@ public class CategoryPost
 
     public static IResult Action([FromBody] CategoryRequest categoryRequest, ApplicationDbContext context)
     {
+        if (string.IsNullOrEmpty(categoryRequest.Name))
+            return Results.BadRequest("Não é permitido cadastrar categoria sem nome");
+
         var category = new Category { Name = categoryRequest.Name };
         context.Categories.Add(category);
         context.SaveChanges();
