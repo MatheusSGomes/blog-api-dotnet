@@ -11,6 +11,7 @@ public class CategoryGetAll
     public static IResult Action(ApplicationDbContext context)
     {
         var categories = context.Categories.ToList();
-        return Results.Ok(categories);
+        var response = categories.Select(c => new CategoryResponse(Id: c.Id, Name: c.Name));
+        return Results.Ok(response);
     }
 }
