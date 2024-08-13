@@ -1,3 +1,4 @@
+using Blog.Exception;
 using Flunt.Notifications;
 using Flunt.Validations;
 
@@ -11,7 +12,7 @@ public class Category: Notifiable<Notification>
     public Category(string name)
     {
         var contract = new Contract<Category>()
-            .IsNotNullOrEmpty(name, "Name");
+            .IsNotNullOrEmpty(name, "name", ResourceErrorMessages.CATEGORY_NULL_OR_EMPTY);
 
         AddNotifications(contract);
 
