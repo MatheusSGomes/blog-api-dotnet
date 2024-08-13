@@ -13,10 +13,11 @@ public class CategoryPost
 
     public static IResult Action([FromBody] CategoryRequest categoryRequest, ApplicationDbContext context)
     {
-        if (string.IsNullOrEmpty(categoryRequest.Name))
-            return Results.BadRequest(ResourceErrorMessages.CATEGORY_NULL_OR_EMPTY);
+        var category = new Category(name: categoryRequest.Name);
 
-        var category = new Category { Name = categoryRequest.Name };
+        if (!category.IsValid)
+            return Results.BadRequest(category.Notifications);
+
         context.Categories.Add(category);
         context.SaveChanges();
         return Results.Created("/category", category.Id);

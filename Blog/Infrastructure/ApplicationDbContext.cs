@@ -1,4 +1,5 @@
 using Blog.Domain;
+using Flunt.Notifications;
 using Microsoft.EntityFrameworkCore;
 
 namespace Blog.Infrastructure;
@@ -15,6 +16,8 @@ public class ApplicationDbContext : DbContext
     {
         // base.OnModelCreating(modelBuilder);
 
+        modelBuilder.Ignore<Notification>();
+        
         modelBuilder.Entity<Article>()
             .Property(p => p.Title)
             .IsRequired();
