@@ -11,11 +11,11 @@ public class CategoryUpdate
     public static string[] Methods => new string[] { HttpMethod.Put.ToString() };
     public static Delegate Handle => Action;
 
-    public static IResult Action([FromRoute] Guid id, [FromBody] CategoryRequest request, ApplicationDbContext context)
+    public static async Task<IResult> Action([FromRoute] Guid id, [FromBody] CategoryRequest request, ApplicationDbContext context)
     {
-        var category = context.Categories.Where(c => c.Id == id).FirstOrDefault();
+        var category = await context.Categories.Where(c => c.Id == id).FirstOrDefaultAsync();
         category.Name = request.Name;
-        context.SaveChanges();
+        await context.SaveChangesAsync();
         return Results.Ok(category);
     }
 }
