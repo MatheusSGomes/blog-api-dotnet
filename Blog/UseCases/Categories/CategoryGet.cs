@@ -1,5 +1,7 @@
+using Blog.Exception;
 using Blog.Infrastructure;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Blog.UseCases.Categories;
 
@@ -9,9 +11,13 @@ public class CategoryGet
     public static string[] Methods => new string[] { HttpMethod.Get.ToString() };
     public static Delegate Handle => Action;
 
-    public static IResult Action([FromRoute] Guid id, ApplicationDbContext context)
+    public static async Task<IResult> Action([FromRoute] Guid id, ApplicationDbContext context)
     {
-        var category = context.Categories.Where(c => c.Id == id).First();
+        var category = await context.Categories.Where(c => c.Id == id).FirstOrDefaultAsync();
+
+        if (category == null)
+            return Results.BadRequest(ResourceErrorMessages.CATEGORY_NOT_FOUND);
+
         var response = new CategoryResponse(Id: category.Id, Name: category.Name);
         return Results.Ok(response);
     }

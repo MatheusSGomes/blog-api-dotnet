@@ -21,4 +21,7 @@
     <data name="CATEGORY_NULL_OR_EMPTY" xml:space="preserve">
         <value>Não é permitido cadastrar categoria sem nome</value>
     </data>
+    <data name="CATEGORY_NOT_FOUND" xml:space="preserve">
+        <value>Nenhuma categoria encontrada</value>
+    </data>
 </root>
