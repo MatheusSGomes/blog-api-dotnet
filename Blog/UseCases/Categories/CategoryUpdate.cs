@@ -1,4 +1,5 @@
 using Blog.Domain;
+using Blog.Exception;
 using Blog.Infrastructure;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -14,6 +15,10 @@ public class CategoryUpdate
     public static async Task<IResult> Action([FromRoute] Guid id, [FromBody] CategoryRequest request, ApplicationDbContext context)
     {
         var category = await context.Categories.Where(c => c.Id == id).FirstOrDefaultAsync();
+        
+        if (category == null)
+            return Results.BadRequest(ResourceErrorMessages.CATEGORY_NOT_FOUND);
+        
         category.Name = request.Name;
         await context.SaveChangesAsync();
         return Results.Ok(category);
