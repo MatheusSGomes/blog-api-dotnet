@@ -7,7 +7,7 @@ namespace Blog.Domain;
 public class Category: Notifiable<Notification>
 {
     public Guid Id { get; set; }
-    public string Name { get; private set; }
+    public string Name { get; set; }
 
     public Category(string name)
     {
