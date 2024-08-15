@@ -1,4 +1,5 @@
 using Blog.Infrastructure;
+using Blog.UseCases.Articles;
 using Blog.UseCases.Categories;
 using Microsoft.EntityFrameworkCore;
 
@@ -27,5 +28,7 @@ app.MapMethods(CategoryGetAll.Template, CategoryGetAll.Methods, CategoryGetAll.H
 app.MapMethods(CategoryGet.Template, CategoryGet.Methods, CategoryGet.Handle);
 app.MapMethods(CategoryUpdate.Template, CategoryUpdate.Methods, CategoryUpdate.Handle);
 app.MapMethods(CategoryDelete.Template, CategoryDelete.Methods, CategoryDelete.Handle);
+
+app.MapMethods(ArticlePost.Template, ArticlePost.Methods, ArticlePost.Handle);
 
 app.Run();
