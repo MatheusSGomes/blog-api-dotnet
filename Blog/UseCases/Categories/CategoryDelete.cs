@@ -9,11 +9,11 @@ public class CategoryDelete
     public static string[] Methods => new string[] { HttpMethod.Delete.ToString() };
     public static Delegate Handle => Action;
 
-    public static IResult Action([FromRoute] Guid id, ApplicationDbContext context)
+    public static async Task<IResult> Action([FromRoute] Guid id, ApplicationDbContext context)
     {
-        var category = context.Categories.Find(id);
+        var category = await context.Categories.FindAsync(id);
         context.Categories.Remove(category);
-        context.SaveChanges();
-        return Results.Ok(category);
+        await context.SaveChangesAsync();
+        return Results.Ok();
     }
 }
