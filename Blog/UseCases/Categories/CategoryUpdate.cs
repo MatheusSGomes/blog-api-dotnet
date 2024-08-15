@@ -21,6 +21,8 @@ public class CategoryUpdate
         
         category.Name = request.Name;
         await context.SaveChangesAsync();
-        return Results.Ok(category);
+
+        var response = new CategoryResponse(category.Id, category.Name);
+        return Results.Ok(response);
     }
 }
