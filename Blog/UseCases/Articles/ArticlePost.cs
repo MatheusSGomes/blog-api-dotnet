@@ -1,6 +1,7 @@
 using Blog.Domain;
 using Blog.Infrastructure;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Blog.UseCases.Articles;
 
@@ -20,6 +21,11 @@ public class ArticlePost
         };
         context.Articles.Add(article);
         context.SaveChanges();
-        return Results.Created("/article", article);
+
+        var category = context.Categories.Find(request.CategoryId);
+        var categoryName = category != null ? category.Name : "";
+
+        var response = new ArticleResponse(article.Title, article.Content, categoryName);
+        return Results.Created("/article", response);
     }
 }
