@@ -26,5 +26,6 @@ app.MapMethods(CategoryPost.Template, CategoryPost.Methods, CategoryPost.Handle)
 app.MapMethods(CategoryGetAll.Template, CategoryGetAll.Methods, CategoryGetAll.Handle);
 app.MapMethods(CategoryGet.Template, CategoryGet.Methods, CategoryGet.Handle);
 app.MapMethods(CategoryUpdate.Template, CategoryUpdate.Methods, CategoryUpdate.Handle);
+app.MapMethods(CategoryDelete.Template, CategoryDelete.Methods, CategoryDelete.Handle);
 
 app.Run();
