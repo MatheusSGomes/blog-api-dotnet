@@ -30,6 +30,7 @@ app.MapMethods(CategoryUpdate.Template, CategoryUpdate.Methods, CategoryUpdate.H
 app.MapMethods(CategoryDelete.Template, CategoryDelete.Methods, CategoryDelete.Handle);
 
 app.MapMethods(ArticlePost.Template, ArticlePost.Methods, ArticlePost.Handle);
+app.MapMethods(ArticleGetAll.Template, ArticleGetAll.Methods, ArticleGetAll.Handle);
 app.MapMethods(ArticleGetById.Template, ArticleGetById.Methods, ArticleGetById.Handle);
 
 app.Run();
