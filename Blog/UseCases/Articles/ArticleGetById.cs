@@ -10,16 +10,19 @@ public class ArticleGetById
     public static string[] Methods => new string[] { HttpMethod.Get.ToString() };
     public static Delegate Handle => Action;
 
-    public static IResult Action(Guid id, ApplicationDbContext context)
+    public static async Task<IResult> Action(Guid id, ApplicationDbContext context)
     {
-        var article = context.Articles.Find(id);
+        var article = await context.Articles.FindAsync(id);
 
         if (article == null)
             return Results.BadRequest(ResourceErrorMessages.ARTICLE_NOT_FOUND);
 
-        var category = context.Categories.Find(article.CategoryId);
+        var category = await context.Categories.FindAsync(article.CategoryId);
+
         string categoryName = category != null ? category.Name : "";
+
         var response = new ArticleResponse(article.Title, article.Content, categoryName);
+
         return Results.Ok(response);
     }
 }
