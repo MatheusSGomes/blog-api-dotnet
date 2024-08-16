@@ -11,7 +11,7 @@ public class ArticlePost
     public static string[] Methods => new string[] { HttpMethod.Post.ToString() };
     public static Delegate Handle => Action;
 
-    public static IResult Action([FromBody] ArticleRequest request, ApplicationDbContext context)
+    public static async Task<IResult> Action([FromBody] ArticleRequest request, ApplicationDbContext context)
     {
         var article = new Article
         {
@@ -19,10 +19,10 @@ public class ArticlePost
             Content = request.Content,
             CategoryId = request.CategoryId,
         };
-        context.Articles.Add(article);
-        context.SaveChanges();
+        await context.Articles.AddAsync(article);
+        await context.SaveChangesAsync();
 
-        var category = context.Categories.Find(request.CategoryId);
+        var category = await context.Categories.FindAsync(request.CategoryId);
         var categoryName = category != null ? category.Name : "";
 
         var response = new ArticleResponse(article.Title, article.Content, categoryName);
