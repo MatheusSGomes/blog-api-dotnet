@@ -1,3 +1,4 @@
+using Blog.Exception;
 using Blog.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,6 +13,10 @@ public class ArticleGetById
     public static IResult Action(Guid id, ApplicationDbContext context)
     {
         var article = context.Articles.Find(id);
+
+        if (article == null)
+            return Results.BadRequest(ResourceErrorMessages.ARTICLE_NOT_FOUND);
+
         var category = context.Categories.Find(article.CategoryId);
         string categoryName = category != null ? category.Name : "";
         var response = new ArticleResponse(article.Title, article.Content, categoryName);

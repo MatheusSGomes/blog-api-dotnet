@@ -56,5 +56,17 @@ namespace Blog.Exception {
                 return ResourceManager.GetString("CATEGORY_NOT_FOUND", resourceCulture);
             }
         }
+        
+        internal static string ARTICLE_NOT_FOUND {
+            get {
+                return ResourceManager.GetString("ARTICLE_NOT_FOUND", resourceCulture);
+            }
+        }
+        
+        internal static string ARTICLE_NULL_OR_EMPTY {
+            get {
+                return ResourceManager.GetString("ARTICLE_NULL_OR_EMPTY", resourceCulture);
+            }
+        }
     }
 }

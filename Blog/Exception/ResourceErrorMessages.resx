@@ -24,4 +24,10 @@
     <data name="CATEGORY_NOT_FOUND" xml:space="preserve">
         <value>Nenhuma categoria encontrada</value>
     </data>
+    <data name="ARTICLE_NOT_FOUND" xml:space="preserve">
+        <value>Artigo não encontrado</value>
+    </data>
+    <data name="ARTICLE_NULL_OR_EMPTY" xml:space="preserve">
+        <value>Não é permitido cadastrar artigo em branco</value>
+    </data>
 </root>
