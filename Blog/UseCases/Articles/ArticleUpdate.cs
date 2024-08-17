@@ -22,7 +22,7 @@ public class ArticleUpdate
         if (category == null)
             return Results.NotFound(ResourceErrorMessages.CATEGORY_NOT_FOUND);
 
-        // TODO: Atualizar tags
+        // TODO: Atualizar tags caso não existam. Caso existam, apenas atribuir ao artigo.
 
         article.Title = request.Title;
         article.Content = request.Content;

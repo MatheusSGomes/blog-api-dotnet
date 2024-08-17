@@ -23,7 +23,7 @@ public class ArticlePost
         await context.Articles.AddAsync(article);
         await context.SaveChangesAsync();
         
-        // TODO: Cadastrar tags
+        // TODO: Cadastrar tags caso não existam. Caso existam, apenas atribuir ao artigo.
 
         var category = await context.Categories.FindAsync(request.CategoryId);
         var categoryName = category != null ? category.Name : "";
