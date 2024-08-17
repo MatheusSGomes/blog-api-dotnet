@@ -20,6 +20,6 @@ public class TagPost
         context.Tags.Add(tag);
         context.SaveChanges();
 
-        return Results.Ok(tag);
+        return Results.Ok(new TagResponse(tag.Id, tag.Name));
     }
 }
