@@ -15,7 +15,7 @@ public class ArticleGetAll
         var articles = await context.Articles.Include(a => a.Category).ToListAsync();
 
         var response = articles.Select(a => 
-            new ArticleResponse(a.Title, a.Content, a.Category.Name));
+            new ArticleResponse(a.Id, a.Title, a.Content, a.Category.Name));
 
         return Results.Ok(response);
     }

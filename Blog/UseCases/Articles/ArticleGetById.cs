@@ -21,7 +21,7 @@ public class ArticleGetById
 
         string categoryName = category != null ? category.Name : "";
 
-        var response = new ArticleResponse(article.Title, article.Content, categoryName);
+        var response = new ArticleResponse(article.Id, article.Title, article.Content, categoryName);
 
         return Results.Ok(response);
     }

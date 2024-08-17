@@ -1,3 +1,3 @@
 namespace Blog.UseCases.Articles;
 
-public record ArticleResponse(string Title, string Content, string CategoryName);
+public record ArticleResponse(Guid id, string Title, string Content, string CategoryName);

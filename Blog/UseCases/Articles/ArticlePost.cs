@@ -19,13 +19,14 @@ public class ArticlePost
             Content = request.Content,
             CategoryId = request.CategoryId,
         };
+
         await context.Articles.AddAsync(article);
         await context.SaveChangesAsync();
 
         var category = await context.Categories.FindAsync(request.CategoryId);
         var categoryName = category != null ? category.Name : "";
 
-        var response = new ArticleResponse(article.Title, article.Content, categoryName);
+        var response = new ArticleResponse(article.Id, article.Title, article.Content, categoryName);
         return Results.Created("/article", response);
     }
 }
