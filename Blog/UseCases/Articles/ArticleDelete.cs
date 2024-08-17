@@ -10,15 +10,15 @@ public class ArticleDelete
     public static string[] Methods => new string[] { HttpMethod.Delete.ToString() };
     public static Delegate Handle => Action;
 
-    public static IResult Action([FromRoute] Guid id, ApplicationDbContext context)
+    public static async Task<IResult> Action([FromRoute] Guid id, ApplicationDbContext context)
     {
-        var article = context.Articles.Find(id);
+        var article = await context.Articles.FindAsync(id);
 
         if (article == null)
             return Results.NotFound(ResourceErrorMessages.ARTICLE_NOT_FOUND);
 
         context.Articles.Remove(article);
-        context.SaveChanges();
+        await context.SaveChangesAsync();
 
         return Results.NoContent();
     }
