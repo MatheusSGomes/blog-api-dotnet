@@ -38,5 +38,6 @@ app.MapMethods(ArticleDelete.Template, ArticleDelete.Methods, ArticleDelete.Hand
 
 app.MapMethods(TagPost.Template, TagPost.Methods, TagPost.Handle);
 app.MapMethods(TagGetAll.Template, TagGetAll.Methods, TagGetAll.Handle);
+app.MapMethods(TagGetById.Template, TagGetById.Methods, TagGetById.Handle);
 
 app.Run();
