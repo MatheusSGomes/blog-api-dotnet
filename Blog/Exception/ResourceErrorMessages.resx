@@ -30,4 +30,7 @@
     <data name="ARTICLE_NULL_OR_EMPTY" xml:space="preserve">
         <value>Não é permitido cadastrar artigo em branco</value>
     </data>
+    <data name="TAG_NOT_FOUND" xml:space="preserve">
+        <value>Tag não encontrada</value>
+    </data>
 </root>

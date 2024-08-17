@@ -1,3 +1,4 @@
+using Blog.Exception;
 using Blog.Infrastructure;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,6 +13,10 @@ public class TagGetById
     private static IResult Action([FromRoute] Guid id, ApplicationDbContext context)
     {
         var tag = context.Tags.Find(id);
+
+        if (tag == null)
+            return Results.NotFound(ResourceErrorMessages.TAG_NOT_FOUND);
+        
         var response = new TagResponse(tag.Id, tag.Name);
         return Results.Ok(response);
     }
