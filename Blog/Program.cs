@@ -1,6 +1,7 @@
 using Blog.Infrastructure;
 using Blog.UseCases.Articles;
 using Blog.UseCases.Categories;
+using Blog.UseCases.Tags;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -34,5 +35,7 @@ app.MapMethods(ArticleGetAll.Template, ArticleGetAll.Methods, ArticleGetAll.Hand
 app.MapMethods(ArticleGetById.Template, ArticleGetById.Methods, ArticleGetById.Handle);
 app.MapMethods(ArticleUpdate.Template, ArticleUpdate.Methods, ArticleUpdate.Handle);
 app.MapMethods(ArticleDelete.Template, ArticleDelete.Methods, ArticleDelete.Handle);
+
+app.MapMethods(TagPost.Template, TagPost.Methods, TagPost.Handle);
 
 app.Run();

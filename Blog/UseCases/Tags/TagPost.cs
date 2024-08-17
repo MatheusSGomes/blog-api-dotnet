@@ -1,3 +1,4 @@
+using Blog.Domain;
 using Blog.Infrastructure;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,7 +12,14 @@ public class TagPost
 
     public static IResult Action([FromBody] TagRequest request, ApplicationDbContext context)
     {
-        
-        return Results.Ok();
+        var tag = new Tag
+        {
+            Name = request.Name
+        };
+
+        context.Tags.Add(tag);
+        context.SaveChanges();
+
+        return Results.Ok(tag);
     }
 }
