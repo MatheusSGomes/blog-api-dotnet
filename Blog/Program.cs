@@ -33,5 +33,6 @@ app.MapMethods(ArticlePost.Template, ArticlePost.Methods, ArticlePost.Handle);
 app.MapMethods(ArticleGetAll.Template, ArticleGetAll.Methods, ArticleGetAll.Handle);
 app.MapMethods(ArticleGetById.Template, ArticleGetById.Methods, ArticleGetById.Handle);
 app.MapMethods(ArticleUpdate.Template, ArticleUpdate.Methods, ArticleUpdate.Handle);
+app.MapMethods(ArticleDelete.Template, ArticleDelete.Methods, ArticleDelete.Handle);
 
 app.Run();

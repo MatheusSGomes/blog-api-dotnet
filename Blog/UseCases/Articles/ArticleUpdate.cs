@@ -21,6 +21,8 @@ public class ArticleUpdate
 
         if (category == null)
             return Results.BadRequest(ResourceErrorMessages.CATEGORY_NOT_FOUND);
+        
+        // TODO: Atualizar tags
 
         article.Title = request.Title;
         article.Content = request.Content;
