@@ -15,7 +15,7 @@ public class ArticleGetById
         var article = await context.Articles.FindAsync(id);
 
         if (article == null)
-            return Results.BadRequest(ResourceErrorMessages.ARTICLE_NOT_FOUND);
+            return Results.NotFound(ResourceErrorMessages.ARTICLE_NOT_FOUND);
 
         var category = await context.Categories.FindAsync(article.CategoryId);
 

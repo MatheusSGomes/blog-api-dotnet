@@ -15,13 +15,13 @@ public class ArticleUpdate
         var article = context.Articles.Find(id);
 
         if (article == null)
-            return Results.BadRequest(ResourceErrorMessages.ARTICLE_NOT_FOUND);
+            return Results.NotFound(ResourceErrorMessages.ARTICLE_NOT_FOUND);
 
         var category = context.Categories.Find(request.CategoryId);
 
         if (category == null)
-            return Results.BadRequest(ResourceErrorMessages.CATEGORY_NOT_FOUND);
-        
+            return Results.NotFound(ResourceErrorMessages.CATEGORY_NOT_FOUND);
+
         // TODO: Atualizar tags
 
         article.Title = request.Title;
@@ -29,7 +29,7 @@ public class ArticleUpdate
         article.CategoryId = request.CategoryId;
 
         context.SaveChanges();
-        
+
         return Results.Ok();
     }
 }
