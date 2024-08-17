@@ -16,7 +16,7 @@ public class CategoryGet
         var category = await context.Categories.Where(c => c.Id == id).FirstOrDefaultAsync();
 
         if (category == null)
-            return Results.BadRequest(ResourceErrorMessages.CATEGORY_NOT_FOUND);
+            return Results.NotFound(ResourceErrorMessages.CATEGORY_NOT_FOUND);
 
         var response = new CategoryResponse(Id: category.Id, Name: category.Name);
         return Results.Ok(response);

@@ -17,7 +17,7 @@ public class CategoryUpdate
         var category = await context.Categories.Where(c => c.Id == id).FirstOrDefaultAsync();
         
         if (category == null)
-            return Results.BadRequest(ResourceErrorMessages.CATEGORY_NOT_FOUND);
+            return Results.NotFound(ResourceErrorMessages.CATEGORY_NOT_FOUND);
         
         category.Name = request.Name;
         await context.SaveChangesAsync();

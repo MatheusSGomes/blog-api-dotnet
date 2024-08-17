@@ -1,3 +1,4 @@
+using Blog.Exception;
 using Blog.Infrastructure;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,6 +13,10 @@ public class CategoryDelete
     public static async Task<IResult> Action([FromRoute] Guid id, ApplicationDbContext context)
     {
         var category = await context.Categories.FindAsync(id);
+
+        if (category == null)
+            return Results.NotFound(ResourceErrorMessages.CATEGORY_NOT_FOUND);
+        
         context.Categories.Remove(category);
         await context.SaveChangesAsync();
         return Results.Ok();
