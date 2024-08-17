@@ -13,12 +13,10 @@ public class ArticlePost
 
     public static async Task<IResult> Action([FromBody] ArticleRequest request, ApplicationDbContext context)
     {
-        var article = new Article
-        {
-            Title = request.Title,
-            Content = request.Content,
-            CategoryId = request.CategoryId,
-        };
+        var article = new Article(request.Title, request.Content, request.CategoryId);
+
+        if (!article.IsValid)
+            return Results.BadRequest(article.Notifications);
 
         await context.Articles.AddAsync(article);
         await context.SaveChangesAsync();
