@@ -29,5 +29,11 @@ public class ApplicationDbContext : DbContext
         modelBuilder.Entity<Category>()
             .Property(p => p.Name)
             .IsRequired();
+
+        modelBuilder.Entity<Article>()
+            .HasMany(article => article.Tags)
+            .WithMany(tag => tag.Articles)
+            .UsingEntity(x => x.ToTable("ArticleTag"));
+
     }
 }

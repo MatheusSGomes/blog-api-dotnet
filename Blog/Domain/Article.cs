@@ -7,5 +7,5 @@ public class Article
     public string Content { get; set; }
     public Guid CategoryId { get; set; }
     public Category Category { get; set; }
-    public List<Tag> Tags { get; set; }
+    public List<Tag> Tags { get; } = [];
 }
