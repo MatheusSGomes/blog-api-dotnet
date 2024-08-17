@@ -10,14 +10,14 @@ public class ArticleUpdate
     public static string[] Methods => new string[] { HttpMethod.Put.ToString() };
     public static Delegate Handle => Action;
 
-    private static IResult Action([FromRoute] Guid id, [FromBody] ArticleRequest request, ApplicationDbContext context)
+    private static async Task<IResult> Action([FromRoute] Guid id, [FromBody] ArticleRequest request, ApplicationDbContext context)
     {
-        var article = context.Articles.Find(id);
+        var article = await context.Articles.FindAsync(id);
 
         if (article == null)
             return Results.NotFound(ResourceErrorMessages.ARTICLE_NOT_FOUND);
 
-        var category = context.Categories.Find(request.CategoryId);
+        var category = await context.Categories.FindAsync(request.CategoryId);
 
         if (category == null)
             return Results.NotFound(ResourceErrorMessages.CATEGORY_NOT_FOUND);
@@ -28,7 +28,7 @@ public class ArticleUpdate
         article.Content = request.Content;
         article.CategoryId = request.CategoryId;
 
-        context.SaveChanges();
+        await context.SaveChangesAsync();
 
         return Results.Ok();
     }
