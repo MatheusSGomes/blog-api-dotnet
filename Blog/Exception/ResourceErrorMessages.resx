@@ -33,4 +33,7 @@
     <data name="TAG_NOT_FOUND" xml:space="preserve">
         <value>Tag não encontrada</value>
     </data>
+    <data name="TAG_NULL_OR_EMPTY" xml:space="preserve">
+        <value>Não é permitido cadastrar tag em branco</value>
+    </data>
 </root>

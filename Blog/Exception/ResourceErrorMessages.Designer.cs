@@ -74,5 +74,11 @@ namespace Blog.Exception {
                 return ResourceManager.GetString("TAG_NOT_FOUND", resourceCulture);
             }
         }
+        
+        internal static string TAG_NULL_OR_EMPTY {
+            get {
+                return ResourceManager.GetString("TAG_NULL_OR_EMPTY", resourceCulture);
+            }
+        }
     }
 }

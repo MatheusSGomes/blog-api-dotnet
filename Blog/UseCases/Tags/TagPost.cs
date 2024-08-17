@@ -12,10 +12,10 @@ public class TagPost
 
     public static IResult Action([FromBody] TagRequest request, ApplicationDbContext context)
     {
-        var tag = new Tag
-        {
-            Name = request.Name
-        };
+        var tag = new Tag(request.Name);
+
+        if (!tag.IsValid)
+            return Results.BadRequest(tag.Notifications);
 
         context.Tags.Add(tag);
         context.SaveChanges();
