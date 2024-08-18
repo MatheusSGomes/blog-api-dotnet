@@ -1,5 +1,6 @@
 using Blog.Exception;
 using Blog.Infrastructure;
+using Blog.UseCases.Tags;
 using Microsoft.EntityFrameworkCore;
 
 namespace Blog.UseCases.Articles;
@@ -12,7 +13,9 @@ public class ArticleGetById
 
     public static async Task<IResult> Action(Guid id, ApplicationDbContext context)
     {
-        var article = await context.Articles.FindAsync(id);
+        var article = await context.Articles
+            .Include(a => a.Tags)
+            .FirstOrDefaultAsync(a => a.Id == id);
 
         if (article == null)
             return Results.NotFound(ResourceErrorMessages.ARTICLE_NOT_FOUND);
@@ -21,7 +24,8 @@ public class ArticleGetById
 
         string categoryName = category != null ? category.Name : "";
 
-        var response = new ArticleResponse(article.Id, article.Title, article.Content, categoryName);
+        var tags = article.Tags.Select(t => new TagResponse(t.Id, t.Name)).ToList();
+        var response = new ArticleResponse(article.Id, article.Title, article.Content, categoryName, tags);
 
         return Results.Ok(response);
     }
