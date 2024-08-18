@@ -10,9 +10,9 @@ public class TagGetById
     public static string[] Methods => new string[] { HttpMethod.Get.ToString() };
     public static Delegate Handle => Action;
 
-    private static IResult Action([FromRoute] Guid id, ApplicationDbContext context)
+    private static async Task<IResult> Action([FromRoute] Guid id, ApplicationDbContext context)
     {
-        var tag = context.Tags.Find(id);
+        var tag = await context.Tags.FindAsync(id);
 
         if (tag == null)
             return Results.NotFound(ResourceErrorMessages.TAG_NOT_FOUND);
