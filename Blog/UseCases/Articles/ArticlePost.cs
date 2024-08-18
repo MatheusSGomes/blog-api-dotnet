@@ -1,5 +1,6 @@
 using Blog.Domain;
 using Blog.Infrastructure;
+using Blog.UseCases.Tags;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -29,7 +30,8 @@ public class ArticlePost
         var category = await context.Categories.FindAsync(request.CategoryId);
         var categoryName = category != null ? category.Name : "";
 
-        var response = new ArticleResponse(article.Id, article.Title, article.Content, categoryName);
+        var tagsResponse = tags.Select(t => new TagResponse(t.Id, t.Name)).ToList();
+        var response = new ArticleResponse(article.Id, article.Title, article.Content, categoryName, tagsResponse);
         return Results.Created("/article", response);
     }
 }
