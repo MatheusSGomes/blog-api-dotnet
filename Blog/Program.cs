@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using Blog.Infrastructure;
 using Blog.UseCases.Articles;
 using Blog.UseCases.Categories;
@@ -12,6 +13,10 @@ builder.Services.AddSwaggerGen();
 var configuration = builder.Configuration;
 builder.Services.AddDbContext<ApplicationDbContext>(options => 
     options.UseNpgsql(configuration.GetConnectionString("DefaultConnection")));
+
+// object cycle
+builder.Services.Configure<Microsoft.AspNetCore.Http.Json.JsonOptions>(options =>
+    options.SerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 
 var app = builder.Build();
 

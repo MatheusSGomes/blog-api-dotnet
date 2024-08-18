@@ -1,4 +1,6 @@
+using Blog.Domain;
 using Blog.Infrastructure;
+using Blog.UseCases.Tags;
 using Microsoft.EntityFrameworkCore;
 using HttpMethod = Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http.HttpMethod;
 
@@ -12,10 +14,16 @@ public class ArticleGetAll
 
     public static async Task<IResult> Action(ApplicationDbContext context)
     {
-        var articles = await context.Articles.Include(a => a.Category).ToListAsync();
+        var articles = await context.Articles
+            .Include(a => a.Category)
+            .Include(a => a.Tags)
+            .ToListAsync();
 
-        var response = articles.Select(a => 
-            new ArticleResponse(a.Id, a.Title, a.Content, a.Category.Name));
+        var response = articles.Select(a =>
+        {
+            var tags = a.Tags.Select(t => new TagResponse(t.Id, t.Name)).ToList();
+            return new ArticleResponse(a.Id, a.Title, a.Content, a.Category.Name, tags);
+        });
 
         return Results.Ok(response);
     }
