@@ -10,9 +10,9 @@ public class TagUpdate
     public static string[] Methods => new string[] { HttpMethod.Put.ToString() };
     public static Delegate Handle => Action;
 
-    private static IResult Action([FromRoute] Guid id, [FromBody] TagRequest request, ApplicationDbContext context)
+    private static async Task<IResult> Action([FromRoute] Guid id, [FromBody] TagRequest request, ApplicationDbContext context)
     {
-        var tag = context.Tags.Find(id);
+        var tag = await context.Tags.FindAsync(id);
 
         if (tag == null)
             return Results.NotFound(ResourceErrorMessages.TAG_NOT_FOUND);
@@ -21,7 +21,7 @@ public class TagUpdate
             return Results.BadRequest(tag.Notifications);
 
         tag.Name = request.Name;
-        context.SaveChanges();
+        await context.SaveChangesAsync();
 
         return Results.Ok(tag.Id);
     }
