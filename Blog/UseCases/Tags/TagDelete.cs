@@ -10,15 +10,15 @@ public class TagDelete
     public static string[] Methods => new string[] { HttpMethod.Delete.ToString() };
     public static Delegate Handle => Action;
 
-    public static IResult Action([FromRoute] Guid id, ApplicationDbContext context)
+    public static async Task<IResult> Action([FromRoute] Guid id, ApplicationDbContext context)
     {
-        var tag = context.Tags.Find(id);
+        var tag = await context.Tags.FindAsync(id);
 
         if (tag == null)
             return Results.BadRequest(ResourceErrorMessages.TAG_NOT_FOUND);
 
         context.Remove(tag);
-        context.SaveChanges();
+        await context.SaveChangesAsync();
 
         return Results.NoContent();
     }
