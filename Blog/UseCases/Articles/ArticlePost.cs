@@ -17,11 +17,14 @@ public class ArticlePost
 
         if (!article.IsValid)
             return Results.BadRequest(article.Notifications);
+        
+        var tags = context.Tags.Where(tag => request.Tags.Contains(tag.Id)).ToList();
+
+        if (tags.Any())
+            article.Tags = tags;
 
         await context.Articles.AddAsync(article);
         await context.SaveChangesAsync();
-        
-        // TODO: Cadastrar tags caso não existam. Caso existam, apenas atribuir ao artigo.
 
         var category = await context.Categories.FindAsync(request.CategoryId);
         var categoryName = category != null ? category.Name : "";

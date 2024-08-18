@@ -10,7 +10,7 @@ public class Article : Notifiable<Notification>
     public string Content { get; set; }
     public Guid CategoryId { get; set; }
     public Category Category { get; set; }
-    public List<Tag> Tags { get; } = [];
+    public List<Tag> Tags { get; set; }
 
     public Article(string title, string content, Guid categoryId)
     {
