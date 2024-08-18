@@ -10,15 +10,15 @@ public class TagPost
     public static string[] Methods => new string[] { HttpMethod.Post.ToString() };
     public static Delegate Handle => Action;
 
-    public static IResult Action([FromBody] TagRequest request, ApplicationDbContext context)
+    public static async Task<IResult> Action([FromBody] TagRequest request, ApplicationDbContext context)
     {
         var tag = new Tag(request.Name);
 
         if (!tag.IsValid)
             return Results.BadRequest(tag.Notifications);
 
-        context.Tags.Add(tag);
-        context.SaveChanges();
+        await context.Tags.AddAsync(tag);
+        await context.SaveChangesAsync();
 
         return Results.Ok(new TagResponse(tag.Id, tag.Name));
     }
