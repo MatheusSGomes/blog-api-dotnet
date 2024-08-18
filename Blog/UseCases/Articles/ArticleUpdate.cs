@@ -1,6 +1,7 @@
 using Blog.Exception;
 using Blog.Infrastructure;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Blog.UseCases.Articles;
 
@@ -12,7 +13,9 @@ public class ArticleUpdate
 
     private static async Task<IResult> Action([FromRoute] Guid id, [FromBody] ArticleRequest request, ApplicationDbContext context)
     {
-        var article = await context.Articles.FindAsync(id);
+        var article = await context.Articles
+            .Include(a => a.Tags)
+            .FirstOrDefaultAsync(a => a.Id == id);
 
         if (article == null)
             return Results.NotFound(ResourceErrorMessages.ARTICLE_NOT_FOUND);
@@ -28,8 +31,7 @@ public class ArticleUpdate
 
         var tags = context.Tags.Where(tag => request.Tags.Contains(tag.Id)).ToList();
 
-        if (tags.Any())
-            article.Tags = tags;
+        article.Tags = tags;
 
         await context.SaveChangesAsync();
 
