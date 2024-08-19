@@ -23,8 +23,12 @@ public class CreateWriter
         if (!result.Succeeded)
             return Results.BadRequest(result.Errors);
 
-        var claimName = new Claim("Name", request.Name);
-        var claimResult = await userManager.AddClaimAsync(user, claimName);
+        var userClaims = new List<Claim>
+        {
+            new Claim("Name", request.Name),
+        };
+
+        var claimResult = await userManager.AddClaimsAsync(user, userClaims);
 
         if (!claimResult.Succeeded)
             return Results.BadRequest(claimResult.Errors);
