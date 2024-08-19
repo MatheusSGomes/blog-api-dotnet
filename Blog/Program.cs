@@ -3,6 +3,7 @@ using Blog.Infrastructure;
 using Blog.UseCases.Articles;
 using Blog.UseCases.Categories;
 using Blog.UseCases.Tags;
+using Blog.UseCases.Writers;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -32,6 +33,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.MapMethods(CreateWriter.Template, CreateWriter.Methods, CreateWriter.Handle);
 
 app.MapMethods(CategoryPost.Template, CategoryPost.Methods, CategoryPost.Handle);
 app.MapMethods(CategoryGetAll.Template, CategoryGetAll.Methods, CategoryGetAll.Handle);
