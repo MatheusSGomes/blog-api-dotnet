@@ -1,6 +1,7 @@
 using System.Text.Json.Serialization;
 using Blog.Infrastructure;
 using Blog.UseCases.Articles;
+using Blog.UseCases.Auth;
 using Blog.UseCases.Categories;
 using Blog.UseCases.Tags;
 using Blog.UseCases.Writers;
@@ -33,6 +34,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.MapMethods(TokenPost.Template, TokenPost.Methods, TokenPost.Handle);
 
 app.MapMethods(CreateWriter.Template, CreateWriter.Methods, CreateWriter.Handle);
 
