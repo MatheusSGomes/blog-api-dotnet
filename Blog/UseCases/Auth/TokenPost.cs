@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using Blog.Exception;
 using Microsoft.AspNetCore.Identity;
 
@@ -20,6 +21,17 @@ public class TokenPost
 
         if (checkPass == false)
             return Results.BadRequest(ResourceErrorMessages.PASSWORD_INVALID);
+
+        var userClaims = await userManager.GetClaimsAsync(user);
+
+        var aditionalClaims = new Claim[]
+        {
+            new Claim(ClaimTypes.Email, request.Email),
+            new Claim(ClaimTypes.NameIdentifier, user.Id)
+        };
+
+        var subject = new ClaimsIdentity(aditionalClaims);
+        subject.AddClaims(userClaims);
 
         return Results.Ok(user);
     }
