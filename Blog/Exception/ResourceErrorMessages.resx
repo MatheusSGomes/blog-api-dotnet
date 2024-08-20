@@ -36,4 +36,7 @@
     <data name="TAG_NULL_OR_EMPTY" xml:space="preserve">
         <value>Não é permitido cadastrar tag em branco</value>
     </data>
+    <data name="PASSWORD_INVALID" xml:space="preserve">
+        <value>Email ou senha inválido</value>
+    </data>
 </root>

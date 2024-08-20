@@ -80,5 +80,11 @@ namespace Blog.Exception {
                 return ResourceManager.GetString("TAG_NULL_OR_EMPTY", resourceCulture);
             }
         }
+        
+        internal static string PASSWORD_INVALID {
+            get {
+                return ResourceManager.GetString("PASSWORD_INVALID", resourceCulture);
+            }
+        }
     }
 }
