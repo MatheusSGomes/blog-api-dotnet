@@ -45,7 +45,7 @@ public class TokenPost
             Subject = subject,
             Audience = "Blog",
             Issuer = "Issuer",
-            Expires = DateTime.UtcNow.AddDays(2),
+            Expires = DateTime.UtcNow.AddSeconds(30), // DateTime.UtcNow.AddDays(2)
             SigningCredentials = new SigningCredentials(symetricSecurityKey, SecurityAlgorithms.HmacSha256Signature),
         };
 
