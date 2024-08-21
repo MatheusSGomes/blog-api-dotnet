@@ -52,6 +52,6 @@ public class TokenPost
         var tokenHanlder = new JwtSecurityTokenHandler();
         var token = tokenHanlder.CreateToken(tokenDescriptor);
 
-        return Results.Ok(user);
+        return Results.Ok(new { token = tokenHanlder.WriteToken(token) });
     }
 }
