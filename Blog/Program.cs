@@ -7,9 +7,11 @@ using Blog.UseCases.Categories;
 using Blog.UseCases.Tags;
 using Blog.UseCases.Writers;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Npgsql;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -92,5 +94,21 @@ app.MapMethods(TagGetAll.Template, TagGetAll.Methods, TagGetAll.Handle);
 app.MapMethods(TagGetById.Template, TagGetById.Methods, TagGetById.Handle);
 app.MapMethods(TagUpdate.Template, TagUpdate.Methods, TagUpdate.Handle);
 app.MapMethods(TagDelete.Template, TagDelete.Methods, TagDelete.Handle);
+
+app.UseExceptionHandler("/error");
+
+app.Map("/error", (HttpContext httpContext) =>
+{
+    var error = httpContext.Features?.Get<IExceptionHandlerFeature>()?.Error;
+
+    if (error != null)
+    {
+        // NpgsqlException
+        if (error.InnerException is NpgsqlException)
+            return Results.Problem(title: "Database out", statusCode: 500);
+    }
+    
+    return Results.Problem(title: "Ocorreu um erro", statusCode: 500);
+});
 
 app.Run();
