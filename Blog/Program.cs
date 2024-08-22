@@ -7,6 +7,7 @@ using Blog.UseCases.Categories;
 using Blog.UseCases.Tags;
 using Blog.UseCases.Writers;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -57,7 +58,14 @@ builder.Services.AddAuthentication(authenticationOptions =>
     };
 });
 
-builder.Services.AddAuthorization();
+builder.Services.AddAuthorization(authorizationOptions =>
+{
+    // Todas as rotas precisam ser autenticadas
+    authorizationOptions.FallbackPolicy = new AuthorizationPolicyBuilder()
+        .AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme)
+        .RequireAuthenticatedUser()
+        .Build();
+});
 
 var app = builder.Build();
 
@@ -103,11 +111,10 @@ app.Map("/error", (HttpContext httpContext) =>
 
     if (error != null)
     {
-        // NpgsqlException
         if (error.InnerException is NpgsqlException)
             return Results.Problem(title: "Database out", statusCode: 500);
     }
-    
+
     return Results.Problem(title: "Ocorreu um erro", statusCode: 500);
 });
 
