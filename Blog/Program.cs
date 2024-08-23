@@ -65,6 +65,13 @@ builder.Services.AddAuthorization(authorizationOptions =>
         .AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme)
         .RequireAuthenticatedUser()
         .Build();
+    
+    authorizationOptions.AddPolicy("NameClaimPolicy", policy =>
+    {
+        policy
+            .RequireAuthenticatedUser()
+            /*.Requirements.Add(new NameClaimRequirement("Matheus 4"))*/;
+    });
 });
 
 var app = builder.Build();
@@ -119,3 +126,32 @@ app.Map("/error", (HttpContext httpContext) =>
 });
 
 app.Run();
+
+
+public class NameClaimRequirement : IAuthorizationRequirement
+{
+    public string Name { get; }
+
+    public NameClaimRequirement(string name)
+    {
+        Name = name;
+    }
+}
+
+public class NameClaimRequirementHandler : AuthorizationHandler<NameClaimRequirement>
+{
+    protected override Task HandleRequirementAsync(AuthorizationHandlerContext context,
+        NameClaimRequirement requirement)
+    {
+        if (context.User.HasClaim(c => c.Type == "Name"))
+        {
+            var user = context.User.FindFirst(c => c.Type == "Name")?.Value;
+
+            if (user == "Matheus 4")
+            {
+                context.Succeed(requirement);
+            }
+        }
+        return Task.CompletedTask;
+    }
+}

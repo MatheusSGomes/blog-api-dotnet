@@ -7,13 +7,14 @@ using HttpMethod = Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http.HttpMe
 
 namespace Blog.UseCases.Articles;
 
+[Authorize(Policy = "NameClaimPolicy")]
 public class ArticleGetAll
 {
     public static string Template => "/article";
     public static string[] Methods => new string[] { HttpMethod.Get.ToString() };
     public static Delegate Handle => Action;
 
-    [AllowAnonymous]
+    [Authorize(Policy = "NameClaimPolicy")]
     public static async Task<IResult> Action(ApplicationDbContext context)
     {
         var articles = await context.Articles
