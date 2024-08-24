@@ -15,14 +15,17 @@ public class ArticleGetAll
     public static string[] Methods => new string[] { HttpMethod.Get.ToString() };
     public static Delegate Handle => Action;
 
-    /// <param name="pages"></param>
+    /// <param name="context"></param>
+    /// <param name="page"></param>
     /// <param name="rows"></param>
     [AllowAnonymous]
-    public static async Task<IResult> Action([FromQuery] int? pages, [FromQuery] int? rows, ApplicationDbContext context)
+    public static async Task<IResult> Action(ApplicationDbContext context, [FromQuery] int page = 1, [FromQuery] int rows = 10)
     {
         var articles = await context.Articles
             .Include(a => a.Category)
             .Include(a => a.Tags)
+            .Skip((page - 1) * rows)
+            .Take(rows)
             .ToListAsync();
 
         var response = articles.Select(a =>
