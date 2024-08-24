@@ -14,7 +14,7 @@ public class ArticleGetAll
     public static string[] Methods => new string[] { HttpMethod.Get.ToString() };
     public static Delegate Handle => Action;
 
-    [Authorize(Policy = "NameClaimPolicy")]
+    [AllowAnonymous]
     public static async Task<IResult> Action(ApplicationDbContext context)
     {
         var articles = await context.Articles
