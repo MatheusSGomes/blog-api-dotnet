@@ -1,6 +1,7 @@
 using Blog.Exception;
 using Blog.Infrastructure;
 using Blog.UseCases.Tags;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 
 namespace Blog.UseCases.Articles;
@@ -11,6 +12,7 @@ public class ArticleGetById
     public static string[] Methods => new string[] { HttpMethod.Get.ToString() };
     public static Delegate Handle => Action;
 
+    [AllowAnonymous]
     public static async Task<IResult> Action(Guid id, ApplicationDbContext context)
     {
         var article = await context.Articles
