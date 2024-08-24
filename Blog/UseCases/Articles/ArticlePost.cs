@@ -1,6 +1,7 @@
 using Blog.Domain;
 using Blog.Infrastructure;
 using Blog.UseCases.Tags;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,6 +13,7 @@ public class ArticlePost
     public static string[] Methods => new string[] { HttpMethod.Post.ToString() };
     public static Delegate Handle => Action;
 
+    [AllowAnonymous]
     public static async Task<IResult> Action([FromBody] ArticleRequest request, ApplicationDbContext context)
     {
         var article = new Article(request.Title, request.Content, request.CategoryId);

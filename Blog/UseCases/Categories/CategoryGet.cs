@@ -1,5 +1,6 @@
 using Blog.Exception;
 using Blog.Infrastructure;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -11,6 +12,7 @@ public class CategoryGet
     public static string[] Methods => new string[] { HttpMethod.Get.ToString() };
     public static Delegate Handle => Action;
 
+    [AllowAnonymous]
     public static async Task<IResult> Action([FromRoute] Guid id, ApplicationDbContext context)
     {
         var category = await context.Categories.Where(c => c.Id == id).FirstOrDefaultAsync();

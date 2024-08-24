@@ -1,4 +1,5 @@
 using Blog.Infrastructure;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 
 namespace Blog.UseCases.Categories;
@@ -9,6 +10,7 @@ public class CategoryGetAll
     public static string[] Methods => new string[] { HttpMethod.Get.ToString() };
     public static Delegate Handle => Action;
 
+    [AllowAnonymous]
     public static async Task<IResult> Action(ApplicationDbContext context)
     {
         var categories = await context.Categories.ToListAsync();
