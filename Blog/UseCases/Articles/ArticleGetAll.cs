@@ -15,6 +15,8 @@ public class ArticleGetAll
     public static string[] Methods => new string[] { HttpMethod.Get.ToString() };
     public static Delegate Handle => Action;
 
+    /// <param name="pages"></param>
+    /// <param name="rows"></param>
     [AllowAnonymous]
     public static async Task<IResult> Action([FromQuery] int? pages, [FromQuery] int? rows, ApplicationDbContext context)
     {
