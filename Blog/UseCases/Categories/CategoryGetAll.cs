@@ -11,6 +11,9 @@ public class CategoryGetAll
     public static string[] Methods => new string[] { HttpMethod.Get.ToString() };
     public static Delegate Handle => Action;
 
+    /// <param name="context"></param>
+    /// <param name="page"></param>
+    /// <param name="rows"></param>
     [AllowAnonymous]
     public static async Task<IResult> Action(ApplicationDbContext context, [FromQuery] int page = 1, [FromQuery] int rows = 5)
     {
