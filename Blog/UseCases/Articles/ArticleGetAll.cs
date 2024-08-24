@@ -2,6 +2,7 @@ using Blog.Domain;
 using Blog.Infrastructure;
 using Blog.UseCases.Tags;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using HttpMethod = Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http.HttpMethod;
 
@@ -15,7 +16,7 @@ public class ArticleGetAll
     public static Delegate Handle => Action;
 
     [AllowAnonymous]
-    public static async Task<IResult> Action(ApplicationDbContext context)
+    public static async Task<IResult> Action([FromQuery] int? pages, [FromQuery] int? rows, ApplicationDbContext context)
     {
         var articles = await context.Articles
             .Include(a => a.Category)
