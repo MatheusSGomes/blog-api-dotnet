@@ -19,5 +19,13 @@ services:
     ports:
       - '6379:6379'
 
+  # username: guest e password: guest  
+  rabbitmq_blog:
+    container_name: rabbitmq_blog
+    image: rabbitmq:3-management
+    ports:
+      - '15672:15672'
+      - '5672:5672'
+
 volumes:
   blog_pg_data:
