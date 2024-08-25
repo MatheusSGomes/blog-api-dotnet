@@ -1,6 +1,6 @@
 using System.Text;
 using System.Text.Json.Serialization;
-using System.Threading.RateLimiting;
+using Blog.Extensions;
 using Blog.Infrastructure;
 using Blog.UseCases.Articles;
 using Blog.UseCases.Auth;
@@ -10,8 +10,8 @@ using Blog.UseCases.Writers;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.AspNetCore.Http.Json;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -56,7 +56,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseNpgsql(configuration.GetConnectionString("DefaultConnection")));
 
 // object cycle
-builder.Services.Configure<Microsoft.AspNetCore.Http.Json.JsonOptions>(options =>
+builder.Services.Configure<JsonOptions>(options =>
     options.SerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 
 builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
@@ -106,29 +106,7 @@ builder.Services.AddAuthorization(authorizationOptions =>
     });
 });
 
-builder.Services.AddRateLimiter(_ => 
-    _.AddFixedWindowLimiter(policyName: "fixed", options =>
-    {
-        options.PermitLimit = 4;
-        options.Window = TimeSpan.FromSeconds(20);
-        options.QueueProcessingOrder = QueueProcessingOrder.OldestFirst;
-        options.QueueLimit = 0;
-    }).OnRejected = async (context, token) =>
-    {
-        context.HttpContext.Response.StatusCode = 429;
-
-        if (context.Lease.TryGetMetadata(MetadataName.RetryAfter, out var retryAfter))
-        {
-            await context.HttpContext.Response.WriteAsync(
-                $"Too many requests. Please, try again after {retryAfter.TotalMinutes} minute(s). ",
-                cancellationToken: token);
-        }
-        else
-        {
-            await context.HttpContext.Response.WriteAsync(
-                "Too many requests. Please, try again. ", cancellationToken: token);
-        }
-    });
+builder.Services.AddRateLimiterRules();
 
 var app = builder.Build();
 
