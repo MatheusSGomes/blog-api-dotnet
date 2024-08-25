@@ -1,5 +1,6 @@
 using System.Text;
 using System.Text.Json.Serialization;
+using System.Threading.RateLimiting;
 using Blog.Infrastructure;
 using Blog.UseCases.Articles;
 using Blog.UseCases.Auth;
@@ -10,6 +11,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -104,6 +106,30 @@ builder.Services.AddAuthorization(authorizationOptions =>
     });
 });
 
+builder.Services.AddRateLimiter(_ => 
+    _.AddFixedWindowLimiter(policyName: "fixed", options =>
+    {
+        options.PermitLimit = 4;
+        options.Window = TimeSpan.FromSeconds(20);
+        options.QueueProcessingOrder = QueueProcessingOrder.OldestFirst;
+        options.QueueLimit = 0;
+    }).OnRejected = async (context, token) =>
+    {
+        context.HttpContext.Response.StatusCode = 429;
+
+        if (context.Lease.TryGetMetadata(MetadataName.RetryAfter, out var retryAfter))
+        {
+            await context.HttpContext.Response.WriteAsync(
+                $"Too many requests. Please, try again after {retryAfter.TotalMinutes} minute(s). ",
+                cancellationToken: token);
+        }
+        else
+        {
+            await context.HttpContext.Response.WriteAsync(
+                "Too many requests. Please, try again. ", cancellationToken: token);
+        }
+    });
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -154,6 +180,17 @@ app.Map("/error", (HttpContext httpContext) =>
 
     return Results.Problem(title: "Ocorreu um erro", statusCode: 500);
 });
+
+app.UseRateLimiter();
+
+app.MapGet("/ratelimited", [AllowAnonymous] () =>
+    {
+        var response = "Resposta gerada em: " + DateTime.UtcNow.ToString();
+        return response;
+    })
+    .WithName("RateLimited")
+    .RequireRateLimiting("fixed")
+    .WithOpenApi();
 
 app.Run();
 
