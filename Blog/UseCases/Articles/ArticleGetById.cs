@@ -1,5 +1,6 @@
 using Blog.Exception;
 using Blog.Infrastructure;
+using Blog.Infrastructure.Messaging;
 using Blog.UseCases.Tags;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
@@ -28,6 +29,8 @@ public class ArticleGetById
 
         var tags = article.Tags.Select(t => new TagResponse(t.Id, t.Name)).ToList();
         var response = new ArticleResponse(article.Id, article.Title, article.Content, categoryName, tags);
+
+        IncrementCounterViewsArticle.SendMessage(1);
 
         return Results.Ok(response);
     }

@@ -5,40 +5,40 @@ using RabbitMQ.Client.Events;
 
 namespace Blog.Infrastructure.Messaging;
 
-public class RabbitMqService : IRabbitMqService
+public class IncrementCounterViewsArticle 
 {
-    public void SendMessage(string message)
+    public static void SendMessage(int increment = 1)
     {
         var factory = new ConnectionFactory { HostName = "localhost" };
         using var connection = factory.CreateConnection();
         using var channel = connection.CreateModel();
 
         channel.QueueDeclare(
-            queue: "hello",
+            queue: "articleCounterViews",
             durable: false,
             exclusive: false,
             autoDelete: false,
             arguments: null);
 
-        var body = Encoding.UTF8.GetBytes(message);
+        var body = Encoding.UTF8.GetBytes(increment.ToString());
 
         channel.BasicPublish(
             exchange: string.Empty,
-            routingKey: "hello",
+            routingKey: "articleCounterViews",
             basicProperties: null,
             body: body);
 
-        Console.WriteLine($" [x] Sent: {message}");
+        Console.WriteLine($" [x] Enviado: {increment}");
     }
 
-    public void ReceiveMessage()
+    public static void ReceiveMessage()
     {
         var factory = new ConnectionFactory { HostName = "localhost" };
         using var connection = factory.CreateConnection();
         using var channel1 = connection.CreateModel();
 
         channel1.QueueDeclare(
-            queue: "hello",
+            queue: "articleCounterViews",
             durable: false,
             exclusive: false,
             autoDelete: false,
@@ -52,11 +52,12 @@ public class RabbitMqService : IRabbitMqService
         {
             var body = deliverEventArgs.Body.ToArray();
             var message = Encoding.UTF8.GetString(body);
+            
             Console.WriteLine($" [x] Recebido: {message}");
         };
 
         channel1.BasicConsume(
-            queue: "hello",
+            queue: "articleCounterViews",
             autoAck: true,
             consumer: consumer);
     }

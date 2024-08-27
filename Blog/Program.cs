@@ -112,8 +112,6 @@ builder.Services.AddRateLimiterRules();
 
 builder.Services.AddSingleton<IConnectionMultiplexer>(ConnectionMultiplexer.Connect("localhost:6379"));
 
-builder.Services.AddScoped<IRabbitMqService, RabbitMqService>();
-
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -152,16 +150,14 @@ app.MapMethods(TagDelete.Template, TagDelete.Methods, TagDelete.Handle);
 
 app.UseExceptionHandler("/error");
 
-app.MapGet("/send", [AllowAnonymous] () =>
+app.MapGet("/producer", [AllowAnonymous] () =>
 {
-    var rabbitMq = new RabbitMqService();
-    rabbitMq.SendMessage("Olá mundo 3");
+    IncrementCounterViewsArticle.SendMessage(1);
 });
 
-app.MapGet("/receive", [AllowAnonymous] () =>
+app.MapGet("/consumer", [AllowAnonymous] () =>
 {
-    var rabbitMq = new RabbitMqService();
-    rabbitMq.ReceiveMessage();
+    IncrementCounterViewsArticle.ReceiveMessage();
 });
 
 app.Map("/error", (HttpContext httpContext) =>
