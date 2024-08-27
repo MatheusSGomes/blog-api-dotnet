@@ -21,6 +21,7 @@
           <PrivateAssets>all</PrivateAssets>
         </PackageReference>
         <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.4" />
+        <PackageReference Include="RabbitMQ.Client" Version="6.8.1" />
         <PackageReference Include="StackExchange.Redis" Version="2.8.0" />
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
     </ItemGroup>
@@ -30,6 +31,7 @@
         <Generator>ResXFileCodeGenerator</Generator>
         <LastGenOutput>ResourceErrorMessages.Designer.cs</LastGenOutput>
       </EmbeddedResource>
+      <EmbeddedResource Remove="Application\Services\**" />
     </ItemGroup>
 
     <ItemGroup>
@@ -38,6 +40,19 @@
         <AutoGen>True</AutoGen>
         <DependentUpon>ResourceErrorMessages.resx</DependentUpon>
       </Compile>
+      <Compile Remove="Application\Services\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Application\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Content Remove="Application\Services\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="Application\Services\**" />
     </ItemGroup>
 
 </Project>

@@ -2,6 +2,7 @@ using System.Text;
 using System.Text.Json.Serialization;
 using Blog.Extensions;
 using Blog.Infrastructure;
+using Blog.Infrastructure.Messaging;
 using Blog.UseCases.Articles;
 using Blog.UseCases.Auth;
 using Blog.UseCases.Categories;
@@ -111,6 +112,8 @@ builder.Services.AddRateLimiterRules();
 
 builder.Services.AddSingleton<IConnectionMultiplexer>(ConnectionMultiplexer.Connect("localhost:6379"));
 
+builder.Services.AddScoped<IRabbitMqService, RabbitMqService>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -149,6 +152,12 @@ app.MapMethods(TagDelete.Template, TagDelete.Methods, TagDelete.Handle);
 
 app.UseExceptionHandler("/error");
 
+app.MapGet("/send", [AllowAnonymous] () =>
+{
+    var rabbitMq = new RabbitMqService();
+    rabbitMq.SendMessage("Olá mundo 2");
+});
+
 app.Map("/error", (HttpContext httpContext) =>
 {
     var error = httpContext.Features?.Get<IExceptionHandlerFeature>()?.Error;
@@ -160,7 +169,7 @@ app.Map("/error", (HttpContext httpContext) =>
     }
 
     return Results.Problem(title: "Ocorreu um erro", statusCode: 500);
-});
+}).WithName("SendRabbitMq").WithOpenApi();
 
 app.UseRateLimiter();
 
