@@ -155,7 +155,13 @@ app.UseExceptionHandler("/error");
 app.MapGet("/send", [AllowAnonymous] () =>
 {
     var rabbitMq = new RabbitMqService();
-    rabbitMq.SendMessage("Olá mundo 2");
+    rabbitMq.SendMessage("Olá mundo 3");
+});
+
+app.MapGet("/receive", [AllowAnonymous] () =>
+{
+    var rabbitMq = new RabbitMqService();
+    rabbitMq.ReceiveMessage();
 });
 
 app.Map("/error", (HttpContext httpContext) =>
