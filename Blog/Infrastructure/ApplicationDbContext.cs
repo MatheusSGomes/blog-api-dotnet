@@ -13,6 +13,7 @@ public class ApplicationDbContext : IdentityDbContext<IdentityUser>
     public DbSet<Tag> Tags { get; set; }
     public DbSet<CounterViews> CounterViews { get; set; }
 
+    public ApplicationDbContext() { }
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options): base (options) { }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

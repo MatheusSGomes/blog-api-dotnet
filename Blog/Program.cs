@@ -150,9 +150,9 @@ app.MapMethods(TagDelete.Template, TagDelete.Methods, TagDelete.Handle);
 
 app.UseExceptionHandler("/error");
 
-app.MapGet("/producer", [AllowAnonymous] () =>
+app.MapGet("/producer/{articleId}", [AllowAnonymous] (Guid articleId) =>
 {
-    IncrementCounterViewsArticle.SendMessage(1);
+    IncrementCounterViewsArticle.SendMessage(articleId, 1);
 });
 
 app.MapGet("/consumer", [AllowAnonymous] () =>

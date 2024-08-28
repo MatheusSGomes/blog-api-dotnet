@@ -1,4 +1,7 @@
 using System.Text;
+using System.Text.Json;
+using Blog.Domain;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
@@ -7,8 +10,12 @@ namespace Blog.Infrastructure.Messaging;
 
 public class IncrementCounterViewsArticle 
 {
-    public static void SendMessage(int increment = 1)
+    public static void SendMessage(Guid articleId, int increment = 1)
     {
+        var articleMessage = new ArticleMessageJson(articleId, increment);
+        var articleMsgSerialized = JsonSerializer.Serialize(articleMessage);
+        var body = Encoding.UTF8.GetBytes(articleMsgSerialized);
+
         var factory = new ConnectionFactory { HostName = "localhost" };
         using var connection = factory.CreateConnection();
         using var channel = connection.CreateModel();
@@ -19,8 +26,6 @@ public class IncrementCounterViewsArticle
             exclusive: false,
             autoDelete: false,
             arguments: null);
-
-        var body = Encoding.UTF8.GetBytes(increment.ToString());
 
         channel.BasicPublish(
             exchange: string.Empty,
@@ -33,6 +38,8 @@ public class IncrementCounterViewsArticle
 
     public static void ReceiveMessage()
     {
+        ApplicationDbContext context = new ApplicationDbContext();
+
         var factory = new ConnectionFactory { HostName = "localhost" };
         using var connection = factory.CreateConnection();
         using var channel1 = connection.CreateModel();
@@ -52,7 +59,27 @@ public class IncrementCounterViewsArticle
         {
             var body = deliverEventArgs.Body.ToArray();
             var message = Encoding.UTF8.GetString(body);
-            
+
+            var jsonMsg = JsonSerializer.Deserialize<ArticleMessageJson>(message);
+
+            CounterViews counterViews = null;
+            counterViews = context.CounterViews.Where(cv => cv.ArticleId == jsonMsg.articleId).FirstOrDefault();
+
+            if (counterViews == null)
+            {
+                counterViews = new CounterViews
+                {
+                    ArticleId = jsonMsg.articleId,
+                    Counter = 1
+                };
+            }
+            else
+            {
+                counterViews.Counter = counterViews.Counter += jsonMsg.increment;
+            }
+
+            context.SaveChanges();
+
             Console.WriteLine($" [x] Recebido: {message}");
         };
 

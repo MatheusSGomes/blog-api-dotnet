@@ -1,3 +1,4 @@
+using Blog.Domain;
 using Blog.Exception;
 using Blog.Infrastructure;
 using Blog.Infrastructure.Messaging;
@@ -30,7 +31,27 @@ public class ArticleGetById
         var tags = article.Tags.Select(t => new TagResponse(t.Id, t.Name)).ToList();
         var response = new ArticleResponse(article.Id, article.Title, article.Content, categoryName, tags);
 
-        IncrementCounterViewsArticle.SendMessage(1);
+        // IncrementCounterViewsArticle.SendMessage(article.Id, 1);
+
+        CounterViews counterViews = null;
+        counterViews = context.CounterViews.Where(cv => cv.ArticleId == article.Id).FirstOrDefault();
+
+        if (counterViews == null)
+        {
+            counterViews = new CounterViews
+            {
+                ArticleId = article.Id,
+                Counter = 1
+            };
+            context.CounterViews.Add(counterViews);
+        }
+        else
+        {
+            counterViews.Counter = counterViews.Counter += 1;
+            context.CounterViews.Update(counterViews);
+        }
+
+        context.SaveChanges();
 
         return Results.Ok(response);
     }

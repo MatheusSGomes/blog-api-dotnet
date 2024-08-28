@@ -45,6 +45,7 @@
 
     <ItemGroup>
       <Folder Include="Application\" />
+      <Folder Include="Infrastructure\Messaging\" />
     </ItemGroup>
 
     <ItemGroup>
