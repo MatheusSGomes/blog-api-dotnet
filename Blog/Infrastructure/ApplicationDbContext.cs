@@ -38,5 +38,8 @@ public class ApplicationDbContext : IdentityDbContext<IdentityUser>
             .WithMany(tag => tag.Articles)
             .UsingEntity(x => x.ToTable("ArticleTag"));
 
+        modelBuilder.Entity<Article>()
+            .Property(a => a.CountViews)
+            .HasDefaultValue(0);
     }
 }
