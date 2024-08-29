@@ -1,5 +1,6 @@
 using System.Text;
 using System.Text.Json.Serialization;
+using Blog.CounterViews;
 using Blog.Extensions;
 using Blog.Infrastructure;
 using Blog.Infrastructure.Messaging;
@@ -152,13 +153,10 @@ app.UseExceptionHandler("/error");
 
 app.MapGet("/producer/{articleId}", [AllowAnonymous] (Guid articleId) =>
 {
-    IncrementCounterViewsArticle.SendMessage(articleId, 1);
+    IncrementCounterViewsArticle.SendMessage(articleId);
 });
 
-app.MapGet("/consumer", [AllowAnonymous] () =>
-{
-    IncrementCounterViewsArticle.ReceiveMessage();
-});
+app.MapMethods(ConsumerArticleCounterViews.Template, ConsumerArticleCounterViews.Methods, ConsumerArticleCounterViews.Handle);
 
 app.Map("/error", (HttpContext httpContext) =>
 {
