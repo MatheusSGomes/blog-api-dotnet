@@ -62,23 +62,25 @@ public class IncrementCounterViewsArticle
 
             var jsonMsg = JsonSerializer.Deserialize<ArticleMessageJson>(message);
 
-            CounterViews counterViews = null;
-            counterViews = context.CounterViews.Where(cv => cv.ArticleId == jsonMsg.articleId).FirstOrDefault();
-
-            if (counterViews == null)
-            {
-                counterViews = new CounterViews
-                {
-                    ArticleId = jsonMsg.articleId,
-                    Counter = 1
-                };
-            }
-            else
-            {
-                counterViews.Counter = counterViews.Counter += jsonMsg.increment;
-            }
-
-            context.SaveChanges();
+            // CounterViews counterViews = null;
+            // counterViews = context.CounterViews.Where(cv => cv.ArticleId == jsonMsg.articleId).FirstOrDefault();
+            //
+            // if (counterViews == null)
+            // {
+            //     counterViews = new CounterViews
+            //     {
+            //         ArticleId = jsonMsg.articleId,
+            //         Counter = 1
+            //     };
+            //     context.CounterViews.Add(counterViews);
+            // }
+            // else
+            // {
+            //     counterViews.Counter = counterViews.Counter += 1;
+            //     context.CounterViews.Update(counterViews);
+            // }
+            //
+            // context.SaveChanges();
 
             Console.WriteLine($" [x] Recebido: {message}");
         };

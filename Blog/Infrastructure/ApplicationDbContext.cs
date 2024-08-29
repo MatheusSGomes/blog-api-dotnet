@@ -11,7 +11,6 @@ public class ApplicationDbContext : IdentityDbContext<IdentityUser>
     public DbSet<Article> Articles { get; set; }
     public DbSet<Category> Categories { get; set; }
     public DbSet<Tag> Tags { get; set; }
-    public DbSet<CounterViews> CounterViews { get; set; }
 
     public ApplicationDbContext() { }
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options): base (options) { }
@@ -39,15 +38,5 @@ public class ApplicationDbContext : IdentityDbContext<IdentityUser>
             .WithMany(tag => tag.Articles)
             .UsingEntity(x => x.ToTable("ArticleTag"));
 
-        modelBuilder.Entity<CounterViews>()
-            .HasNoKey();
-
-        modelBuilder.Entity<CounterViews>()
-            .HasIndex(cv => cv.ArticleId)
-            .IsUnique();
-
-        modelBuilder.Entity<CounterViews>()
-            .Property(cv => cv.Counter)
-            .HasDefaultValue(0);
     }
 }
