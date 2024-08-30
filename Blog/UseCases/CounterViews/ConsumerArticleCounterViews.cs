@@ -1,10 +1,6 @@
-using System.Text;
 using Blog.Infrastructure;
-using Blog.UseCases.CounterViews;
+using Blog.Infrastructure.Messaging;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.EntityFrameworkCore;
-using RabbitMQ.Client;
-using RabbitMQ.Client.Events;
 
 namespace Blog.CounterViews;
 

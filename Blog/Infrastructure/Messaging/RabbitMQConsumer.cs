@@ -3,7 +3,7 @@ using Blog.Infrastructure;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 
-namespace Blog.UseCases.CounterViews;
+namespace Blog.Infrastructure.Messaging;
 
 public class RabbitMQConsumer
 {

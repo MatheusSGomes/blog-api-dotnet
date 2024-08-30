@@ -31,10 +31,7 @@ public class ArticleGetById
         var tags = article.Tags.Select(t => new TagResponse(t.Id, t.Name)).ToList();
         var response = new ArticleResponse(article.Id, article.Title, article.Content, categoryName, tags);
 
-        IncrementCounterViewsArticle.SendMessage(article.Id);
-
-        // article.CountViews += 1;
-        // context.SaveChanges();
+        RabbitMQProducer.SendMessage(article.Id);
 
         return Results.Ok(response);
     }

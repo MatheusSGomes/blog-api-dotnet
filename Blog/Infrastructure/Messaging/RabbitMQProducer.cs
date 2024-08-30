@@ -9,7 +9,7 @@ using RabbitMQ.Client.Events;
 
 namespace Blog.Infrastructure.Messaging;
 
-public class IncrementCounterViewsArticle 
+public class RabbitMQProducer 
 {
     public static void SendMessage(Guid articleId)
     {
@@ -31,7 +31,5 @@ public class IncrementCounterViewsArticle
             routingKey: "articleCounterViews",
             basicProperties: null,
             body: body);
-
-        Console.WriteLine($" [x] Enviado artigo: {articleId}");
     }
 }
