@@ -114,15 +114,19 @@ builder.Services.AddRateLimiterRules();
 
 builder.Services.AddSingleton<IConnectionMultiplexer>(ConnectionMultiplexer.Connect("localhost:6379"));
 
-builder.Services.AddOpenTelemetry().WithTracing(b =>
-{
-    b.SetResourceBuilder(ResourceBuilder.CreateDefault().AddService(builder.Environment.ApplicationName))
-        .AddAspNetCoreInstrumentation()
-        .AddOtlpExporter(opts =>
-        {
-            opts.Endpoint = new Uri("http://localhost:4317");
-        });
-});
+builder.Services.AddOpenTelemetry()
+    .WithTracing(b =>
+    {
+        b.SetResourceBuilder(ResourceBuilder.CreateDefault().AddService(builder.Environment.ApplicationName))
+            .AddAspNetCoreInstrumentation()
+            .AddHttpClientInstrumentation()
+            .AddEntityFrameworkCoreInstrumentation(x => x.SetDbStatementForText = true)
+            .AddNpgsql()
+            .AddOtlpExporter(opts =>
+            {
+                opts.Endpoint = new Uri("http://localhost:4317");
+            });
+    });
 
 var app = builder.Build();
 
