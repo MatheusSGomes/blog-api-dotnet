@@ -26,6 +26,14 @@ services:
     ports:
       - '15672:15672'
       - '5672:5672'
+  
+  jaeger:
+    container_name: jaeger_blog
+    image: jaegertracing/opentelemetry-all-in-one
+    ports:
+      - '4317:4317'
+      - '13133:13133'
+      - '16686:16686'
 
 volumes:
   blog_pg_data:
