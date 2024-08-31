@@ -3,7 +3,6 @@ using System.Text.Json.Serialization;
 using Blog.CounterViews;
 using Blog.Extensions;
 using Blog.Infrastructure;
-using Blog.Infrastructure.Messaging;
 using Blog.UseCases.Articles;
 using Blog.UseCases.Auth;
 using Blog.UseCases.Categories;
@@ -18,7 +17,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Npgsql;
-using OpenTelemetry;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
 using StackExchange.Redis;
@@ -120,7 +118,6 @@ builder.Services.AddOpenTelemetry().WithTracing(b =>
 {
     b.SetResourceBuilder(ResourceBuilder.CreateDefault().AddService(builder.Environment.ApplicationName))
         .AddAspNetCoreInstrumentation()
-        // .AddHttpClientInstrumentation()
         .AddOtlpExporter(opts =>
         {
             opts.Endpoint = new Uri("http://localhost:4317");
