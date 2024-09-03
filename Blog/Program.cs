@@ -196,35 +196,7 @@ app.MapGet("/ratelimited", [AllowAnonymous] () =>
 
 app.UseWebSockets();
 
-app.MapGet("/ws", [AllowAnonymous] async (context) =>
-{
-    if (context.WebSockets.IsWebSocketRequest)
-    {
-        using var webSocket = await context.WebSockets.AcceptWebSocketAsync();
-
-        while (true)
-        {
-            if (webSocket.State == WebSocketState.Open)
-            {
-                await webSocket.SendAsync(
-                    Encoding.ASCII.GetBytes($"Send -> {DateTime.Now}"),
-                    WebSocketMessageType.Text, 
-                    true, 
-                    CancellationToken.None);
-
-                await Task.Delay(3000);
-            }
-            else if (webSocket.State is WebSocketState.Closed or WebSocketState.Aborted)
-            {
-                break;
-            }
-        }
-    }
-    else
-    {
-        context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
-    }
-});
+app.MapGet("/ws", ArticlePostWebSocket.Handle);
 
 app.Run();
 
