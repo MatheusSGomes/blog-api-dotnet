@@ -1,3 +1,5 @@
+using System.Net;
+using System.Net.WebSockets;
 using System.Text;
 using System.Text.Json.Serialization;
 using Blog.CounterViews;
@@ -192,8 +194,39 @@ app.MapGet("/ratelimited", [AllowAnonymous] () =>
     .RequireRateLimiting("fixed")
     .WithOpenApi();
 
-app.Run();
+app.UseWebSockets();
 
+app.MapGet("/ws", [AllowAnonymous] async (context) =>
+{
+    if (context.WebSockets.IsWebSocketRequest)
+    {
+        using var webSocket = await context.WebSockets.AcceptWebSocketAsync();
+
+        while (true)
+        {
+            if (webSocket.State == WebSocketState.Open)
+            {
+                await webSocket.SendAsync(
+                    Encoding.ASCII.GetBytes($"Send -> {DateTime.Now}"),
+                    WebSocketMessageType.Text, 
+                    true, 
+                    CancellationToken.None);
+
+                await Task.Delay(3000);
+            }
+            else if (webSocket.State is WebSocketState.Closed or WebSocketState.Aborted)
+            {
+                break;
+            }
+        }
+    }
+    else
+    {
+        context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+    }
+});
+
+app.Run();
 
 public class NameClaimRequirement : IAuthorizationRequirement
 {
