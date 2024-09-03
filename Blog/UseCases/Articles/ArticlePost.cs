@@ -3,7 +3,6 @@ using Blog.Infrastructure;
 using Blog.UseCases.Tags;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace Blog.UseCases.Articles;
 
@@ -34,6 +33,9 @@ public class ArticlePost
 
         var tagsResponse = tags.Select(t => new TagResponse(t.Id, t.Name)).ToList();
         var response = new ArticleResponse(article.Id, article.Title, article.Content, categoryName, tagsResponse);
+
+        // TODO: Disparar mensagem para WebSocket
+
         return Results.Created("/article", response);
     }
 }

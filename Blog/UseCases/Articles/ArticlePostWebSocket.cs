@@ -20,8 +20,10 @@ public class ArticlePostWebSocket
             {
                 if (webSocket.State == WebSocketState.Open)
                 {
+                    var buffer = Encoding.ASCII.GetBytes($"Send -> {DateTime.Now}");
+
                     await webSocket.SendAsync(
-                        Encoding.ASCII.GetBytes($"Send -> {DateTime.Now}"),
+                        buffer,
                         WebSocketMessageType.Text, 
                         true, 
                         CancellationToken.None);
